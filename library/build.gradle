@@ -32,4 +32,4 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }
 
-group='com.github.velosmobile'
+group='com.github.velos'
