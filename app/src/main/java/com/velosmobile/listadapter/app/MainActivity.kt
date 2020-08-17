@@ -2,20 +2,30 @@ package com.velosmobile.listadapter.app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.velosmobile.listadapter.Item
 import com.velosmobile.listadapter.ItemContent
 import com.velosmobile.listadapter.ListAdapter
 import com.velosmobile.listadapter.R
+import com.velosmobile.listadapter.app.viewmodel.ItemContentBlue
+import com.velosmobile.listadapter.app.viewmodel.ItemContentRed
+import com.velosmobile.listadapter.app.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.item_type_1.view.*
 
 class MainActivity : AppCompatActivity() {
+    private val viewModel: MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
+
     private val adapter = ListAdapter()
-    private val onClickListener: (MainItemContent) -> Unit = { content ->
-        Toast.makeText(this, content.text, Toast.LENGTH_SHORT).show()
+
+    private val onRedItemClickListener: (ItemContentRed) -> Unit = { content ->
+        Toast.makeText(this, "Red item: ${content.text}", Toast.LENGTH_SHORT).show()
+    }
+
+    private val onBlueItemClickListener: (ItemContentBlue) -> Unit = { content ->
+        Toast.makeText(this, "Blue item: ${content.text}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,57 +33,28 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        refresh_button.setOnClickListener { refresh() }
+        refresh_button.setOnClickListener { viewModel.refresh() }
         list.layoutManager = LinearLayoutManager(this)
         list.adapter = adapter
-        refresh()
+
+        viewModel.listItems.observe(this, Observer { adapter.submitList(it.toItemList()) })
+
+        viewModel.refresh()
     }
 
-    private fun refresh() {
-        val data = mutableListOf<Item>()
-
-        for (i in 0..10) {
-            if (i % 2 == 0) {
-                data.add(
-                    ItemType1(
-                        content = MainItemContent(id = i, text = i.toString()),
-                        onClick = onClickListener)
-                )
-            } else {
-                data.add(
-                    ItemType2(
-                        content = MainItemContent(id = i, text = i.toString()),
-                        onClick = onClickListener)
-                )
+    private fun List<ItemContent>.toItemList(): List<Item> {
+        return map {
+            when (it) {
+                is ItemContentRed -> {
+                    ItemRed(it, onRedItemClickListener)
+                }
+                is ItemContentBlue -> {
+                    ItemBlue(it, onBlueItemClickListener)
+                }
+                else -> {
+                    throw IllegalArgumentException("Unsupported type: ${it::class.java}")
+                }
             }
         }
-
-        adapter.submitList(data.apply { shuffle() })
     }
-
-    class ItemType1(
-        override val content: MainItemContent,
-        val onClick: (MainItemContent) -> Unit
-    ) : Item {
-        override val layout: Int = R.layout.item_type_1
-
-        override fun bind(view: View) {
-            view.text.text = content.text
-            view.setOnClickListener { onClick.invoke(content) }
-        }
-    }
-
-    class ItemType2(
-        override val content: MainItemContent,
-        val onClick: (MainItemContent) -> Unit
-    ) : Item {
-        override val layout: Int = R.layout.item_type_2
-
-        override fun bind(view: View) {
-            view.text.text = content.text
-            view.setOnClickListener { onClick.invoke(content) }
-        }
-    }
-
-    data class MainItemContent(override val id: Int, val text: String): ItemContent
 }
