@@ -18,4 +18,8 @@ class ListAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(ItemDiffCallback(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         getItem(position).bind(holder.itemView)
     }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        getItem(holder.adapterPosition).destroy(holder.itemView)
+    }
 }
