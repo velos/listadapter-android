@@ -1,6 +1,5 @@
 # ListAdapter
-[![Release](https://jitpack.io/v/velos/listadapter-android.svg)]
-(https://jitpack.io/#velos/listadapter-android)
+[![Release](https://jitpack.io/v/velos/listadapter-android.svg)](https://jitpack.io/#velos/listadapter-android)
 
 This library is an implementation of
 [ListAdapter](https://developer.android.com/reference/kotlin/androidx/recyclerview/widget/ListAdapter)
