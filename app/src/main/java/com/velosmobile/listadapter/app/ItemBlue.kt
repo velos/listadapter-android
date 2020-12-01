@@ -4,7 +4,6 @@ import android.view.View
 import com.velosmobile.listadapter.Item
 import com.velosmobile.listadapter.R
 import com.velosmobile.listadapter.app.viewmodel.ItemContentBlue
-import kotlinx.android.synthetic.main.item_blue.view.*
 
 class ItemBlue(
     override val content: ItemContentBlue,

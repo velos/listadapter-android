@@ -2,10 +2,11 @@ package com.velosmobile.listadapter
 
 import android.view.View
 import androidx.annotation.LayoutRes
+import androidx.viewbinding.ViewBinding
 
 interface Item {
     val content: ItemContent
-    @get:LayoutRes val layout: Int
+    val viewBinding: ViewBinding
     fun bind(view: View)
 
     /**

@@ -13,7 +13,6 @@ import com.velosmobile.listadapter.R
 import com.velosmobile.listadapter.app.viewmodel.ItemContentBlue
 import com.velosmobile.listadapter.app.viewmodel.ItemContentRed
 import com.velosmobile.listadapter.app.viewmodel.MainViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
